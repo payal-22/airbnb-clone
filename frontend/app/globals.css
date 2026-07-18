@@ -1272,3 +1272,361 @@ button {
     display: none;
   }
 }
+.host-button-link {
+  color: #222222;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.host-page {
+  background: #ffffff;
+  min-height: 100vh;
+}
+
+.host-navigation {
+  align-items: center;
+  display: flex;
+  gap: 24px;
+}
+
+.host-navigation a {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.host-navigation-active {
+  color: #222222 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 7px;
+}
+
+.host-container {
+  margin: 0 auto;
+  max-width: 1250px;
+  padding: 50px 40px 90px;
+}
+
+.host-dashboard-heading {
+  align-items: end;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 35px;
+}
+
+.host-dashboard-heading h1 {
+  font-size: 36px;
+  margin: 5px 0 9px;
+}
+
+.host-dashboard-heading > div > p:last-child {
+  color: var(--muted);
+  margin: 0;
+}
+
+.host-refresh-button,
+.host-secondary-button {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  cursor: pointer;
+  font-weight: 700;
+  padding: 12px 16px;
+}
+
+.host-stat-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 40px;
+}
+
+.host-stat-card {
+  border: 1px solid var(--light-border);
+  border-radius: 14px;
+  box-shadow: 0 3px 12px rgb(0 0 0 / 6%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+}
+
+.host-stat-card span {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.host-stat-card strong {
+  font-size: 28px;
+}
+
+.host-form-section,
+.host-dashboard-section {
+  border-top: 1px solid var(--light-border);
+  padding: 42px 0;
+}
+
+.host-form-section {
+  border: 1px solid var(--light-border);
+  border-radius: 16px;
+  padding: 30px;
+}
+
+.host-section-heading {
+  align-items: start;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.host-section-heading h2 {
+  font-size: 25px;
+  margin: 0 0 8px;
+}
+
+.host-section-heading p {
+  color: var(--muted);
+  margin: 0;
+}
+
+.host-listing-form {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.host-listing-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.host-listing-form label > span {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.host-listing-form input,
+.host-listing-form select,
+.host-listing-form textarea {
+  background: white;
+  border: 1px solid #b0b0b0;
+  border-radius: 8px;
+  outline: none;
+  padding: 12px;
+  width: 100%;
+}
+
+.host-listing-form input:focus,
+.host-listing-form select:focus,
+.host-listing-form textarea:focus {
+  border-color: #222222;
+  box-shadow: 0 0 0 1px #222222;
+}
+
+.host-listing-form textarea {
+  font-family: inherit;
+  resize: vertical;
+}
+
+.host-form-full-width {
+  grid-column: 1 / -1;
+}
+
+.host-form-actions {
+  grid-column: 1 / -1;
+  max-width: 260px;
+}
+
+.host-action-message {
+  background: #f7f7f7;
+  border-radius: 8px;
+  margin: 22px 0 0;
+  padding: 13px;
+}
+
+.host-listing-grid {
+  display: grid;
+  gap: 22px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.host-listing-card {
+  border: 1px solid var(--light-border);
+  border-radius: 14px;
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  overflow: hidden;
+}
+
+.host-listing-card > img {
+  height: 100%;
+  min-height: 180px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.host-listing-card-content {
+  padding: 20px;
+}
+
+.host-listing-title-row {
+  align-items: start;
+  display: flex;
+  gap: 15px;
+  justify-content: space-between;
+}
+
+.host-listing-title-row span:first-child {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.host-listing-title-row h3 {
+  font-size: 18px;
+  margin: 5px 0 0;
+}
+
+.host-listing-status {
+  background: #eaf8ed;
+  border-radius: 20px;
+  color: #116329;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 6px 9px;
+}
+
+.host-listing-status.inactive {
+  background: #eeeeee;
+  color: #666666;
+}
+
+.host-listing-card-content > p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.host-card-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 22px;
+}
+
+.host-card-actions a,
+.host-card-actions button {
+  background: transparent;
+  border: 0;
+  color: #222222;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.host-card-actions .host-delete-button {
+  color: #b32525;
+}
+
+.host-listing-inactive {
+  opacity: 0.6;
+}
+
+.host-booking-table-wrapper {
+  border: 1px solid var(--light-border);
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+.host-booking-table {
+  border-collapse: collapse;
+  min-width: 800px;
+  width: 100%;
+}
+
+.host-booking-table th,
+.host-booking-table td {
+  border-bottom: 1px solid var(--light-border);
+  padding: 16px;
+  text-align: left;
+}
+
+.host-booking-table th {
+  background: #f7f7f7;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.host-booking-table td {
+  font-size: 14px;
+}
+
+.host-booking-status {
+  background: #eaf8ed;
+  border-radius: 20px;
+  color: #116329;
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 6px 9px;
+  text-transform: capitalize;
+}
+
+.empty-host-bookings {
+  border: 1px dashed #b0b0b0;
+  border-radius: 12px;
+  color: var(--muted);
+  padding: 40px;
+  text-align: center;
+}
+
+@media (max-width: 950px) {
+  .host-listing-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .host-listing-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .host-container {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  .host-navigation a:not(.host-navigation-active) {
+    display: none;
+  }
+
+  .host-dashboard-heading {
+    align-items: start;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .host-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .host-listing-form {
+    grid-template-columns: 1fr;
+  }
+
+  .host-form-full-width,
+  .host-form-actions {
+    grid-column: auto;
+  }
+
+  .host-listing-card {
+    grid-template-columns: 1fr;
+  }
+
+  .host-listing-card > img {
+    height: 220px;
+  }
+}

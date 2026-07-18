@@ -171,9 +171,9 @@ export default function Home() {
             <Link className="trips-header-link" href="/trips">
               Trips
             </Link>
-            <button className="host-button">
-              Airbnb your home
-            </button>
+            <Link className="host-button host-button-link" href="/host">
+                Airbnb your home
+            </Link>
 
             <button
               aria-label="User menu"
