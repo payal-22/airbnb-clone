@@ -168,6 +168,9 @@ export default function Home() {
           </nav>
 
           <div className="header-actions">
+            <Link className="trips-header-link" href="/trips">
+              Trips
+            </Link>
             <button className="host-button">
               Airbnb your home
             </button>
