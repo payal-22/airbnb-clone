@@ -10,7 +10,11 @@ from sqlalchemy.orm import Session
 from app import models, schemas
 from app.database import Base, engine, get_db
 
+import os
+from app.seed import seed_database
+
 Base.metadata.create_all(bind=engine)
+seed_database()
 
 app = FastAPI(
     title="Airbnb Clone API",
@@ -18,12 +22,19 @@ app = FastAPI(
     version="1.0.0",
 )
 
+frontend_url = os.getenv("FRONTEND_URL", "").rstrip("/")
+
+allowed_origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+if frontend_url:
+    allowed_origins.append(frontend_url)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
