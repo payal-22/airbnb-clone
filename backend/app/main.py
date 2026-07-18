@@ -1,4 +1,5 @@
 import math
+from datetime import date
 from typing import Optional
 
 from fastapi import Depends, FastAPI, HTTPException, Query, status
@@ -266,3 +267,221 @@ def get_host_listings(
         .order_by(models.Listing.created_at.desc())
         .all()
     )
+
+@app.post(
+    "/bookings",
+    response_model=schemas.BookingResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_booking(
+    booking_data: schemas.BookingCreate,
+    db: Session = Depends(get_db),
+):
+    listing = (
+        db.query(models.Listing)
+        .filter(
+            models.Listing.id == booking_data.listing_id,
+            models.Listing.is_active.is_(True),
+        )
+        .first()
+    )
+
+    if listing is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Listing not found",
+        )
+
+    guest = (
+        db.query(models.User)
+        .filter(models.User.id == booking_data.guest_id)
+        .first()
+    )
+
+    if guest is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Guest not found",
+        )
+
+    if guest.role != "guest":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Selected user is not a guest",
+        )
+
+    if booking_data.check_in < date.today():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Check-in date cannot be in the past",
+        )
+
+    if booking_data.check_out <= booking_data.check_in:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Check-out date must be after check-in date",
+        )
+
+    if booking_data.guests > listing.max_guests:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=(
+                f"This listing allows a maximum of "
+                f"{listing.max_guests} guests"
+            ),
+        )
+
+    overlapping_booking = (
+        db.query(models.Booking)
+        .filter(
+            models.Booking.listing_id == booking_data.listing_id,
+            models.Booking.status == "confirmed",
+            models.Booking.check_in < booking_data.check_out,
+            models.Booking.check_out > booking_data.check_in,
+        )
+        .first()
+    )
+
+    if overlapping_booking is not None:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="The listing is unavailable for the selected dates",
+        )
+
+    nights = (booking_data.check_out - booking_data.check_in).days
+    nightly_total = listing.price_per_night * nights
+
+    total_price = (
+        nightly_total
+        + listing.cleaning_fee
+        + listing.service_fee
+    )
+
+    booking = models.Booking(
+        listing_id=booking_data.listing_id,
+        guest_id=booking_data.guest_id,
+        check_in=booking_data.check_in,
+        check_out=booking_data.check_out,
+        guests=booking_data.guests,
+        nights=nights,
+        nightly_total=nightly_total,
+        cleaning_fee=listing.cleaning_fee,
+        service_fee=listing.service_fee,
+        total_price=total_price,
+        status="confirmed",
+    )
+
+    db.add(booking)
+    db.commit()
+    db.refresh(booking)
+
+    return booking
+
+
+@app.get(
+    "/listings/{listing_id}/unavailable-dates",
+)
+def get_unavailable_dates(
+    listing_id: int,
+    db: Session = Depends(get_db),
+):
+    listing = (
+        db.query(models.Listing)
+        .filter(models.Listing.id == listing_id)
+        .first()
+    )
+
+    if listing is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Listing not found",
+        )
+
+    bookings = (
+        db.query(models.Booking)
+        .filter(
+            models.Booking.listing_id == listing_id,
+            models.Booking.status == "confirmed",
+        )
+        .order_by(models.Booking.check_in.asc())
+        .all()
+    )
+
+    return [
+        {
+            "booking_id": booking.id,
+            "check_in": booking.check_in,
+            "check_out": booking.check_out,
+        }
+        for booking in bookings
+    ]
+
+
+@app.get(
+    "/users/{user_id}/trips",
+    response_model=list[schemas.BookingResponse],
+)
+def get_user_trips(
+    user_id: int,
+    db: Session = Depends(get_db),
+):
+    user = (
+        db.query(models.User)
+        .filter(models.User.id == user_id)
+        .first()
+    )
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
+
+    bookings = (
+        db.query(models.Booking)
+        .filter(models.Booking.guest_id == user_id)
+        .order_by(models.Booking.check_in.asc())
+        .all()
+    )
+
+    return bookings
+
+
+@app.get(
+    "/hosts/{host_id}/bookings",
+    response_model=list[schemas.BookingResponse],
+)
+def get_host_bookings(
+    host_id: int,
+    db: Session = Depends(get_db),
+):
+    host = (
+        db.query(models.User)
+        .filter(models.User.id == host_id)
+        .first()
+    )
+
+    if host is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Host not found",
+        )
+
+    if host.role != "host":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Selected user is not a host",
+        )
+
+    bookings = (
+        db.query(models.Booking)
+        .join(
+            models.Listing,
+            models.Booking.listing_id == models.Listing.id,
+        )
+        .filter(models.Listing.host_id == host_id)
+        .order_by(models.Booking.check_in.asc())
+        .all()
+    )
+
+    return bookings
