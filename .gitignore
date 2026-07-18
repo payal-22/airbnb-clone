@@ -1,2 +1,3 @@
 backend/*.db
 backend/.venv-deploy-test/
+backend/.venv/
