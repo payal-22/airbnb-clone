@@ -1,4 +1,7 @@
 "use client";
+import Link from "next/link";
+
+
 
 /* eslint-disable @next/next/no-img-element */
 
@@ -357,9 +360,10 @@ export default function Home() {
           listings.length > 0 && (
             <div className="listing-grid">
               {listings.map((listing) => (
-                <article
-                  className="listing-card"
-                  key={listing.id}
+                <article className="listing-card" key={listing.id}>
+                <Link
+                  className="listing-card-link"
+                  href={`/listings/${listing.id}`}
                 >
                   <div className="image-wrapper">
                     <img
@@ -369,13 +373,7 @@ export default function Home() {
                       src={listing.image_url}
                     />
 
-                    <button
-                      aria-label={`Add ${listing.title} to favourites`}
-                      className="favourite-button"
-                      type="button"
-                    >
-                      ♡
-                    </button>
+                    <span className="favourite-button">♡</span>
 
                     <span className="guest-favourite">
                       Guest favourite
@@ -414,10 +412,11 @@ export default function Home() {
                       night
                     </p>
                   </div>
-                </article>
-              ))}
-            </div>
-          )}
+                </Link>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
 
       <footer className="site-footer">
